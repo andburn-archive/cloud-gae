@@ -11,6 +11,7 @@ class Configuration(object):
         # set default config
         self.name = 'Default App'
         self.appid = 'default'
+        self.apphost = 'localhost'
         # set config from file
         self.setup(filename)
     # end - init
@@ -23,6 +24,7 @@ class Configuration(object):
         # set variables from file
         self.name = config.get(self.DEFAULT_SECTION, 'Name')
         self.appid = config.get(self.APP_SECTION, 'AppId')
+        self.apphost = config.get(self.APP_SECTION, 'AppHost')
     # end - setup
 
 # end - Config
