@@ -13,9 +13,38 @@ class PersonalDetails(db.Model):
     desc = db.StringProperty(multiline=True)
     googlelink = db.StringProperty(multiline=True)
     date = db.DateTimeProperty(auto_now_add=True)
-
-    @staticmethod
-    def info():
-        return "<h1>Hi its me</h1>"
-
 # end : PersonalDetails
+
+
+class StoredToken(db.Model):
+    user_email = db.StringProperty(required=True)
+    session_token = db.StringProperty(required=True)
+# end : StoredToken
+
+
+class EventDetails(db.Model):
+    author = db.UserProperty()
+    eventname = db.StringProperty(multiline=True)
+    description = db.StringProperty(multiline=True)
+    date = db.StringProperty(multiline=True)
+    location = db.StringProperty(multiline=True)
+    location_cord1 = db.StringProperty(multiline=True)
+    location_cord2 = db.StringProperty(multiline=True)
+# end : EventDetails
+
+
+class EventAtendees(db.Model):
+    atendee = db.UserProperty()
+    eventid = db.StringProperty(multiline=True)
+    eventname = db.StringProperty(multiline=True)
+    date = db.StringProperty(multiline=True)
+    location = db.StringProperty(multiline=True)
+# end : EventAtendees
+
+
+class Comments(db.Model):
+    author = db.UserProperty()
+    eventid = db.StringProperty(multiline=True)
+    comment = db.StringProperty(multiline=True)
+    date = db.DateTimeProperty(auto_now_add=True)
+    # end : Comments
