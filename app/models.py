@@ -47,4 +47,4 @@ class Comments(db.Model):
     eventid = db.StringProperty(multiline=True)
     comment = db.StringProperty(multiline=True)
     date = db.DateTimeProperty(auto_now_add=True)
-    # end : Comments
+# end : Comments

@@ -22,19 +22,18 @@ class MainHandler(webapp2.RequestHandler):
 
         if user:
             self.response.headers['Content-Type'] = 'text/html'
-            self.response.write('Hello, ' + user.nickname() + ', '
-                + '<a href="' + users.create_logout_url('/') + '">Sign Out</a>')
+            self.response.write('Hello, ' + user.nickname() + ', <a href="' +
+                                users.create_logout_url('/') + '">Sign Out</a>')
         else:
             self.redirect(users.create_login_url(self.request.uri))
     # end : get
 # end : MainHandler
 
+
 class GetLogin(webapp2.RequestHandler):
     def get(self):
-        self.response.out.write("<iframe src=\"" +
-                config.apphost + "userlogin\"" +
-                " style=\"border: 0\" width=\"530\" heig" +
-                "ht=\"650\" frameborder=\"0\" scrolling=\"no\"></iframe>")
+        self.response.out.write('<iframe src="' + config.apphost + 'userlogin" ' +
+                                'style="border: 0" width="530" height="650" frameborder="0" scrolling="no"></iframe>')
     # end : get
 # end : GetLogin
 
