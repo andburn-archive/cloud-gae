@@ -1,16 +1,26 @@
 #!/usr/bin/env python
 
-import ConfigParser
-
+import os
+import jinja2
 import webapp2
 
 from google.appengine.api import users
 
 import app.models
 import app.helpers
+import app.handlers.user
 
-# get configuratoin information
-config = app.helpers.Configuration('app.config')
+
+# get configuration information
+app.globals.CONFIG = app.helpers.Configuration('app.config')
+
+# setup jinja2 environment
+app.globals.JINJA_ENVIRONMENT = jinja2.Environment(
+    loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__),
+                                                app.globals.CONFIG.template_dir)),
+    extensions=['jinja2.ext.autoescape'],
+    autoescape=True)
+
 # TODO need to set actions in hash ? + reflection
 
 
@@ -30,32 +40,14 @@ class MainHandler(webapp2.RequestHandler):
 # end : MainHandler
 
 
-class GetLogin(webapp2.RequestHandler):
-    def get(self):
-        self.response.out.write('<iframe src="' + config.apphost + 'userlogin" ' +
-                                'style="border: 0" width="530" height="650" frameborder="0" scrolling="no"></iframe>')
-    # end : get
-# end : GetLogin
-
-
-# NOTE handles user login and subsequent output
-class UserLogin(webapp2.RequestHandler):
-    def get(self):
-        # self.response.out.write('User Login Page')
-        user = users.get_current_user()
-        if user:
-            self.response.out.write('<h2>Hello, ' + user.nickname() + '</h2>')
-            self.response.out.write('<h2>Login has been successful!!</h2>')
-            self.response.out.write('<h2>Click the links on the Menu Bar above to begin....</h2>')
-        else:
-            self.redirect(users.create_login_url(self.request.uri))
-    # end : get
-# end : GetLogin
-
 ##----- WSGIApplication Route Handler -----##
 
 application = webapp2.WSGIApplication([
     ('/', MainHandler),
-    ('/getlogin', GetLogin),
-    ('/userlogin', UserLogin),
+    ('/getlogin', app.handlers.user.GetLogin),
+    ('/userlogin', app.handlers.user.UserLogin),
+    ('/checklogin', app.handlers.user.CheckLogin),
+    ('/usermanagement', app.handlers.user.UserManagement),
+    ('/sign', app.handlers.user.SetRegistrationDetails),
+    ('/register', app.handlers.user.GetRegistrationDetails),
 ], debug=True)
