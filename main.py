@@ -6,9 +6,11 @@ import webapp2
 
 from google.appengine.api import users
 
+import app.globals
 import app.models
 import app.helpers
 import app.handlers.user
+import app.handlers.event
 
 
 # get configuration information
@@ -16,12 +18,14 @@ app.globals.CONFIG = app.helpers.Configuration('app.config')
 
 # setup jinja2 environment
 app.globals.JINJA_ENVIRONMENT = jinja2.Environment(
-    loader=jinja2.FileSystemLoader(os.path.join(os.path.dirname(__file__),
-                                                app.globals.CONFIG.template_dir)),
+    loader=jinja2.FileSystemLoader(
+        os.path.join(os.path.dirname(__file__),
+                     app.globals.CONFIG.template_dir)),
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
 
 # TODO need to set actions in hash ? + reflection
+#   ie within the various handlers, hardcoded routes e.g. UserManagment
 
 
 ##----- Request Handlers -----##
@@ -50,4 +54,5 @@ application = webapp2.WSGIApplication([
     ('/usermanagement', app.handlers.user.UserManagement),
     ('/sign', app.handlers.user.SetRegistrationDetails),
     ('/register', app.handlers.user.GetRegistrationDetails),
+    ('/viewevent', app.handlers.event.ViewEvent),
 ], debug=True)

@@ -5,8 +5,6 @@ from google.appengine.api import users
 import app.globals
 import app.models
 
-import os;
-
 
 class GetLogin(webapp2.RequestHandler):
     def get(self):
@@ -36,7 +34,7 @@ class UserLogin(webapp2.RequestHandler):
 class CheckLogin(webapp2.RequestHandler):
     def get(self):
         self.response.out.write('<iframe src="' + app.globals.CONFIG.apphost
-                                + 'UserManagement" style="border: 0" '
+                                + 'usermanagement" style="border: 0" '
                                 + 'width="530" height="650" frameborder="0" '
                                 + 'scrolling="no"></iframe>')
     # end : get
@@ -56,7 +54,9 @@ class UserManagement(webapp2.RequestHandler):
 
 class GetRegistrationDetails(webapp2.RequestHandler):
     def get(self):
-        template_values = {}
+        template_values = {
+            'sign_route': '/sign'
+        }
         template = app.globals.JINJA_ENVIRONMENT.get_template('registration_form.html')
         self.response.out.write(template.render(template_values))
     # end : get
@@ -81,5 +81,5 @@ class SetRegistrationDetails(webapp2.RequestHandler):
         pd.googlelink = self.request.get('callink')
         pd.put()
         self.response.out.write('<h2 align=center>Registration Complete!</h2>')
-    # end : get
+    # end : post
 # end : SetRegistrationDetails
