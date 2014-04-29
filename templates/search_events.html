@@ -1,0 +1,26 @@
+{% if results_found %}
+
+<table border="0" class="eventtext" width="100%">
+
+    <tr class="tblheader">
+        <th>Event</th>
+        <th>Date</th>
+        <th>Location</th>
+    </tr>
+    {% for event in search_results %}
+    <tr>
+        <td>{{ event['name'] }}</td>
+        <td>{{ event['date'] }}</td>
+        <td>{{ event['location'] }}</td>
+        <td>
+            <a href="#" onclick="CLoad('Event Viewer', '/viewevent?eventid={{ event['key'] }})');">View</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% else %}
+
+<h2 class="eventtext">No Results!!</h2>
+
+{% endif %}

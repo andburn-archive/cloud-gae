@@ -25,7 +25,7 @@ app.globals.JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 # TODO need to set actions in hash ? + reflection
-#   ie within the various handlers, hardcoded routes e.g. UserManagment
+#   ie within the various handlers, hardcoded routes e.g. UserManagement
 
 
 ##----- Request Handlers -----##
@@ -55,4 +55,7 @@ application = webapp2.WSGIApplication([
     ('/sign', app.handlers.user.SetRegistrationDetails),
     ('/register', app.handlers.user.GetRegistrationDetails),
     ('/viewevent', app.handlers.event.ViewEvent),
+    ('/myevents', app.handlers.event.MyEvents),
+    ('/listevents', app.handlers.event.ListEvents),
+    ('/searchevents', app.handlers.event.SearchEvents),
 ], debug=True)

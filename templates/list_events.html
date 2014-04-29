@@ -1,0 +1,19 @@
+<table border="0" class="eventtext" width="100%">
+
+    <tr class="tblheader">
+        <th>Event</th>
+        <th>Date</th>
+        <th>Location</th>
+        <th></th>
+    </tr>
+    {% for event in events %}
+    <tr>
+        <td>{{event.eventname}}</td>
+        <td>{{event.date}}</td>
+        <td>{{event.location}}</td>
+        <td>
+            <a href="#" onclick="CLoad('Event Viewer', '/viewevent?eventid={{ event.key().id() }})');">View</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>

@@ -1,0 +1,46 @@
+<h2>Created Events</h2>
+
+<table border=0 class=\"eventtext\" width=100%>
+    <tr class="tblheader">
+        <th>Author</th>
+        <th>Event</th>
+        <th>Date</th>
+        <th>Location</th>
+        <th></th>
+    </tr>
+    {% for event in created_events %}
+    <tr>
+        <td>{{ event.author }}</td>
+        <td>{{ event.eventname }}</td>
+        <td>{{ event.date }}</td>
+        <td>{{ event.location }}</td>
+        <td>
+            <a href="#" onclick="CLoad('Event Viewer', '/viewevent?eventid={{ event.key().id() }})');">View</a>
+        </td>
+   </tr>
+    {% endfor %}
+</table>
+
+<hr />
+
+<h2>Attending Events</h2>
+<table border="0" class="eventtext" width="100%">
+    <tr class="tblheader">
+        <th>Name</th>
+        <th>Event</th>
+        <th>Date</th>
+        <th>Location</th>
+        <th></th>
+    </tr>
+    {% for event in attending_events %}
+    <tr>
+        <td>{{ event.attendee }}</td>
+        <td>{{ event.eventname }}</td>
+        <td>{{ event.date }}</td>
+        <td>{{ event.location }}</td>
+        <td>
+            <a href="#" onclick="CLoad('Event Viewer', '/viewevent?eventid={{ event.key().id() }})');">View</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>

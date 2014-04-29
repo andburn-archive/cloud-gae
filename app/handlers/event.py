@@ -1,19 +1,25 @@
 import webapp2
 
 from google.appengine.ext import db
+from google.appengine.api import users
 
 import app.globals
 
+
 class AddEventIframe(webapp2.RequestHandler):
     def get(self):
-        self.response.out.write('<iframe src="' + app.globals.CONFIG.apphost + 'addevent" ' +
+        self.response.out.write('<iframe src="' + app.globals.CONFIG.apphost
+                                + 'addevent" ' +
                                 'style="border: 0" width="530" height="650" '
                                 + 'frameborder="0" scrolling="no"></iframe>')
-    # end : get
+        # end : get
+
+
 # end : AddEventIframe
 
 
 class ViewEvent(webapp2.RequestHandler):
+
     def get(self):
         eventid = self.request.get('eventid')
         events = db.GqlQuery("SELECT * FROM EventDetails")
@@ -28,6 +34,7 @@ class ViewEvent(webapp2.RequestHandler):
                 coord1 = event.location_cord1
                 coord2 = event.location_cord2
 
+        # TODO: possible use before assignment here
         template_values = {
             'eid': eid,
             'author': author,
@@ -38,109 +45,98 @@ class ViewEvent(webapp2.RequestHandler):
             'coord1': coord1,
             'coord2': coord2
         }
-        template = app.globals.JINJA_ENVIRONMENT.get_template('view_event_form.html')
+        template = app.globals.JINJA_ENVIRONMENT.get_template(
+            'view_event_form.html')
         self.response.out.write(template.render(template_values))
-    # end : get
+        # end : get
 # end : ViewEvent
 
 
-# class MyEvents(webapp2.RequestHandler):
-#     def get(self):
-#         self.response.out.write('<h2>Created Events</h2>')
-#         ev = db.GqlQuery("SELECT * FROM EventDetails WHERE author = :1", users.get_current_user())
-#         self.response.out.write('<table border=0 class=\"eventtext\" width=100%>')
-#         self.response.out.write('<tr class=\"tblheader\"><th>Name</th><th>Event</th><th>Date</th><th>Location</th><th></th></tr>')
-#         for event in ev:
-#             self.response.out.write('<tr>')
-#             self.response.out.write('<td>%s</td>' % event.author)
-#             self.response.out.write('<td>%s</td>' % event.eventname)
-#             self.response.out.write('<td>%s</td>' % event.date)
-#             self.response.out.write('<td>%s</td>' % event.location)
-#             self.response.out.write('<td><a href=# onclick=\"CLoad(\'Event Viewer\',\'/viewevent?eventid=%s\')\">View</a></td>' % event.key().id())
-#             self.response.out.write('</tr>')
-#         self.response.out.write('</table>')
-#
-#         self.response.out.write('<hr>')
-#         self.response.out.write('<h2>Attending Events</h2>')
-#         events = db.GqlQuery("SELECT * FROM EventAtendees WHERE atendee = :1", users.get_current_user())
-#         self.response.out.write('<table border=0 class=\"eventtext\" width=100%>')
-#         self.response.out.write('<tr class=\"tblheader\"><th>Name</th><th>Event</th><th>Date</th><th>Location</th><th></th></tr>')
-#         for event in events:
-#             self.response.out.write('<tr>')
-#             self.response.out.write('<td>%s</td>' % event.atendee)
-#             self.response.out.write('<td>%s</td>' % event.eventname)
-#             self.response.out.write('<td>%s</td>' % event.date)
-#             self.response.out.write('<td>%s</td>' % event.location)
-#             self.response.out.write('<td><a href=# onclick=\"CLoad(\'Event Viewer\',\'/viewevent?eventid=%s\')\">View</a></td>' % event.eventid)
-#             self.response.out.write('</tr>')
-#         self.response.out.write('</table>')
-#     # end : get
-# # end : MyEvents
-#
-#
-# class ListEvents(webapp.RequestHandler):
-#     def get(self):
-#         events = db.GqlQuery("SELECT * FROM EventDetails")
-#         self.response.out.write('<table border=0 class=\"eventtext\" width=100%>')
-#         self.response.out.write('<tr class=\"tblheader\"><th>Event</th><th>Date</th><th>Location</th><th></th></tr>')
-#         for event in events:
-#             self.response.out.write('<tr>')
-#             #self.response.out.write('<td>%s</td>' % event.key().id())
-#             #self.response.out.write('<td>%s</td>' % event.author)
-#             self.response.out.write('<td>%s</td>' % event.eventname)
-#             #self.response.out.write('<td>%s</td>' % event.description)
-#             self.response.out.write('<td>%s</td>' % event.date)
-#             self.response.out.write('<td>%s</td>' % event.location)
-#             #self.response.out.write('<td>%s</td>' % event.location_cord1)
-#             #self.response.out.write('<td>%s</td>' % event.location_cord2)
-#             #self.response.out.write('<td><a href=\"viewevent?eventid=%s\">View</a></td>' % event.key().id())
-#             self.response.out.write('<td><a href=# onclick=\"CLoad(\'Event Viewer\',\'/viewevent?eventid=%s\')\">View</a></td>' % event.key().id())
-#             self.response.out.write('</tr>')
-#         self.response.out.write('</table>')
-#     # end : get
-# # end : ListEvents
-#
-#
-# class SearchEvents(webapp2.RequestHandler):
-#     def get(self):
-#         sport = self.request.get('sport')
-#         location = self.request.get('location')
-#         events = db.GqlQuery("SELECT * FROM EventDetails")
-#         self.response.out.write('<table border=0 class=\"eventtext\" width=100%>')
-#         self.response.out.write('<tr class=\"tblheader\"><th>Event</th><th>Date</th><th>Location</th><th></th></tr>')
-#         counter=0
-#         for event in events:
-#             res = -1
-#             res1 = -1
-#             res2 = -1
-#             if len(sport) > 0:
-#                 res = event.description.lower().find(sport.lower())
-#                 res1 = event.eventname.lower().find(sport.lower())
-#             else:
-#                 res = -1
-#                 res1 = -1
-#
-#             if len(location) > 0:
-#                 res2 = event.location.lower().find(location.lower())
-#             else:
-#                 res2 = -1
-#
-#             if res != -1 or res1 != -1 or res2 != -1:
-#                 counter=1
-#                 self.response.out.write('<tr>')
-#                 #self.response.out.write('<td>%s</td>' % event.key().id())
-#                 #self.response.out.write('<td>%s</td>' % event.author)
-#                 self.response.out.write('<td>%s</td>' % event.eventname)
-#                 #self.response.out.write('<td>%s</td>' % event.description)
-#                 self.response.out.write('<td>%s</td>' % event.date)
-#                 self.response.out.write('<td>%s</td>' % event.location)
-#                 #self.response.out.write('<td>%s</td>' % event.location_cord1)
-#                 #self.response.out.write('<td>%s</td>' % event.location_cord2)
-#                 #self.response.out.write('<td><a href=\"viewevent?eventid=%s\">View</a></td>' % event.key().id())
-#                 self.response.out.write('<td><a href=# onclick=\"CLoad(\'Event Viewer\',\'/viewevent?eventid=%s\')\">View</a></td>' % event.key().id())
-#                 self.response.out.write('</tr>')
-#         self.response.out.write('</table>')
-#         if counter == 0:
-#             self.response.out.write('<h2 class=\"eventtext\">No Results!!</h2>')
-#     # end : get
-# # end : SearchEvents
+class MyEvents(webapp2.RequestHandler):
+    def get(self):
+        created_events = db.GqlQuery(
+            "SELECT * FROM EventDetails WHERE author = :1",
+            users.get_current_user())
+
+        attending_events = db.GqlQuery(
+            "SELECT * FROM EventAtendees WHERE atendee = :1",
+            users.get_current_user())
+
+        template_values = {
+            'created_events': created_events,
+            'attending_events': attending_events
+        }
+
+        template = app.globals.JINJA_ENVIRONMENT.get_template('my_events.html')
+        self.response.out.write(template.render(template_values))
+        # end : get
+
+
+# end : MyEvents
+
+
+class ListEvents(webapp2.RequestHandler):
+    def get(self):
+        events = db.GqlQuery("SELECT * FROM EventDetails")
+
+        template_values = {
+            'events': events
+        }
+
+        template = app.globals.JINJA_ENVIRONMENT.get_template(
+            'list_events.html')
+        self.response.out.write(template.render(template_values))
+        # end : get
+
+
+# end : ListEvents
+
+
+class SearchEvents(webapp2.RequestHandler):
+    def get(self):
+        # TODO: can we generalise this away from sport
+        sport = self.request.get('sport')
+        location = self.request.get('location')
+
+        events = db.GqlQuery("SELECT * FROM EventDetails")
+        search_results = []
+
+        for event in events:
+            descp_result = -1
+            name_result = -1
+            loc_result = -1
+            if len(sport) > 0:
+                descp_result = event.description.lower().find(sport.lower())
+                name_result = event.eventname.lower().find(sport.lower())
+            else:
+                descp_result = -1
+                name_result = -1
+
+            if len(location) > 0:
+                loc_result = event.location.lower().find(location.lower())
+            else:
+                loc_result = -1
+
+            if descp_result != -1 or name_result != -1 or loc_result != -1:
+                new_results = {
+                    'name': event.eventname,
+                    'date': event.date,
+                    'location': event.location,
+                    'key': event.key().id()
+                }
+                search_results.append(new_results)
+        # end : for
+
+        template_values = {
+            'search_results': search_results,
+            'results_found': False
+        }
+
+        if len(search_results) >= 0:
+            template_values['results_found'] = True
+
+        template = app.globals.JINJA_ENVIRONMENT.get_template(
+            'search_events.html')
+        self.response.out.write(template.render(template_values))
+    # end : get
+# end : SearchEvents
