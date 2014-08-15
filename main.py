@@ -58,4 +58,5 @@ application = webapp2.WSGIApplication([
     ('/myevents', app.handlers.event.MyEvents),
     ('/listevents', app.handlers.event.ListEvents),
     ('/searchevents', app.handlers.event.SearchEvents),
+    ('/addevent', app.handlers.calendar.CalendarContacts)
 ], debug=True)

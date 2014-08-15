@@ -13,8 +13,6 @@ class AddEventIframe(webapp2.RequestHandler):
                                 'style="border: 0" width="530" height="650" '
                                 + 'frameborder="0" scrolling="no"></iframe>')
         # end : get
-
-
 # end : AddEventIframe
 
 
